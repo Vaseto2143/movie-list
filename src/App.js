@@ -1,25 +1,51 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route } from 'react-router-dom';
+import NavbarComponent from './components/layout/NavbarComponent';
+import Homepage from './components/home/Homepage';
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import LikedMovies from './components/movies/LikedMovies';
+import RateMovie from './components/ratings/RateMovie';
+import CommentOnMovie from './components/comments/CommentOnMovie';
+import RateCollection from './components/ratings/RateCollection';
+import CommentOnCollection from './components/comments/CommentOnCollection';
+import CollectionComments from './components/comments/CollectionComments';
+import MovieComments from './components/comments/MovieComments';
+import CollectionRatings from './components/ratings/CollectionRatings';
+import MovieRatings from './components/ratings/MovieRatings';
+import { Card, Container } from 'react-bootstrap';
+import PersonalCollections from './components/collections/PersonalCollections';
+import CreateCollection from './components/collections/CreateCollection';
+import CollectionDetails from './components/collections/CollectionDetails';
+import ResetPassword from './components/auth/ResetPassword';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <NavbarComponent />
+        <Card>
+          <Card.Body>
+              <Route path='/collections' component={PersonalCollections} />
+              <Route path='/createCollection' component={CreateCollection} />
+              <Route path='/collectionDetails' component={CollectionDetails} />
+              <Route path='/likedMovies' component={LikedMovies} />
+              <Route path='/rateMovie' component={RateMovie} />
+              <Route path='/commentMovie' component={CommentOnMovie} />
+              <Route path='/rateCollection' component={RateCollection} />
+              <Route path='/commentCollection' component={CommentOnCollection} />
+              <Route path='/collectionComments' component={CollectionComments} />
+              <Route path='/movieComments' component={MovieComments} />
+              <Route path='/collectionRatings' component={CollectionRatings} />
+              <Route path='/movieRatings' component={MovieRatings} />
+              <Route path='/signin' component={SignIn} />
+              <Route path='/signup' component={SignUp} />
+              <Route path='/passReset' component={ResetPassword} />
+              <Route exact path='/' component={Homepage} />
+          </Card.Body>
+        </Card>
+      </div>
+    </BrowserRouter>
   );
 }
 
