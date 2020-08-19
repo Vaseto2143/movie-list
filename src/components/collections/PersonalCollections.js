@@ -10,8 +10,7 @@ class PersonalCollections extends Component {
     }
 
     handleAssign = (collection, movie, userId) => (e) => {
-        collection[1].userId = userId
-        this.props.assignMovieToCollection(collection, movie);
+        this.props.assignMovieToCollection([collection[0], {authorId: userId, movies: collection[1].movies, privacy: collection[1].privacy}], movie);
     }
 
     handleDelete = (collection) => (e) => {
@@ -20,7 +19,7 @@ class PersonalCollections extends Component {
 
     handleEdit = (collection, userId) => (e) => {
         collection[1].userId = userId
-        this.props.selectCollectionForEdit(collection);
+        this.props.selectCollectionForEdit([collection[0], {authorId: userId, movies: collection[1].movies, privacy: collection[1].privacy}]);
     }
 
     handlePrivacyChange = (collection) => (e) => {

@@ -55,7 +55,7 @@ class CollectionDetails extends Component {
                     <Card style={{ marginTop: '20px' }} key={movie.movieTitle}>
                         <MovieDetails key={movie.position} movie={movie.movieInfo} position={movie.position} />
                         {auth.uid ?
-                            collection[1].userId == auth.uid ?
+                            collection[1].authorId == auth.uid ?
                                 <Card.Footer>
                                     {movie.position > 1 ?
                                         <Button className="float-left" variant="outline-success" onClick={this.handleMoveUp(collection, movie)}>Move up</Button>
@@ -69,7 +69,7 @@ class CollectionDetails extends Component {
                                 </Card.Footer>
                                 :
                                 <Card.Footer>
-                                    <Link to="/collections" className="btn btn-outline-success" style={{ marginRight: "10px" }} /* onClick={this.props.addMovieToClipboard(movie)} */>Add to collection</Link>
+                                    <Link /* to="/collections" */ className="btn btn-outline-success" style={{ marginRight: "10px" }} /* onClick={this.props.addMovieToClipboard(movie)} */>Add to collection</Link>
 
                                     {!user.likedMovies.hasOwnProperty([movie.movieTitle]) ?
                                         <Button className="float-right" variant="outline-success" onClick={this.handleLike}>Like</Button>
@@ -100,7 +100,7 @@ class CollectionDetails extends Component {
                             <Card.Footer>
                                 <Link to="/collectionRatings" onClick={() => { }} style={{ marginRight: "10px" }} className="btn btn-outline-secondary">Ratings</Link>
                                 <Link to="/collectionComments" onClick={() => { }} className="btn btn-outline-secondary">Comments</Link>
-                                {collection[1].userId == auth.uid ?
+                                {collection[1].authorId == auth.uid ?
                                     collection[1].privacy == "Private" ?
                                         <Button onClick={this.handlePrivacyChange(collection)} variant="outline-danger" className="float-right">{collection[1].privacy}</Button>
                                         :

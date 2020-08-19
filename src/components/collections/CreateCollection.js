@@ -60,7 +60,7 @@ class CreateCollection extends Component {
                                 </Form.Group>
                                 <Link to="/collections" className="btn btn-outline-primary" onClick={this.handleSubmit}>
                                     Create
-                            </Link>
+                                </Link>
                             </Form>
                         </Card.Body>
                     </Card>

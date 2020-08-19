@@ -24,7 +24,9 @@ export const signUp = (credentials) => {
                 firstName: credentials.firstName,
                 lastName: credentials.lastName,
                 likedMovies: {},
-                collections: {}
+                collections: {},
+                comments: {},
+                ratings: {}
             });
         }).then(() => {
             dispatch({ type: "SIGNUP_SUCCESS" });

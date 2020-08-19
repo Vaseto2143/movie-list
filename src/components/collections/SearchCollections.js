@@ -28,8 +28,8 @@ class SearchCollections extends Component {
         })
     }
 
-    handleDetails = (collection, userId) => (e) => {
-        this.props.selectCollectionForEdit([collection.title, { movies: collection.movies, privacy: collection.privacy, userId }])
+    handleDetails = (collection, authorId, comments, ratings) => (e) => {
+        this.props.selectCollectionForEdit([collection.title, { movies: collection.movies, privacy: collection.privacy, authorId, comments, ratings }])
     }
 
     render() {
@@ -44,13 +44,13 @@ class SearchCollections extends Component {
                     <Card.Footer>
                         {auth.uid && auth.uid != collection.authorId ?
                             <span>
-                                <Link to="/rateCollection" onClick={() => { }} className="btn btn-outline-secondary" style={{ marginRight: "10px" }}>Rate</Link>
-                                <Link to="/commentCollection" onClick={() => { }} className="btn btn-outline-secondary">Comment</Link>
+                                <Link to="/rateCollection" onClick={this.handleDetails(collection, collection.authorId, collection.comments, collection.ratings)} className="btn btn-outline-secondary" style={{ marginRight: "10px" }}>Rate</Link>
+                                <Link to="/commentCollection" onClick={this.handleDetails(collection, collection.authorId, collection.comments, collection.ratings)} className="btn btn-outline-secondary">Comment</Link>
                             </span>
                             :
                             null
                         }
-                        <Link onClick={this.handleDetails(collection, collection.authorId)} to="/collectionDetails" className="btn btn-outline-success float-right">{auth.uid == collection.authorId ? "Edit" : "Inspect"}</Link>
+                        <Link onClick={this.handleDetails(collection, collection.authorId, collection.comments, collection.ratings)} to="/collectionDetails" className="btn btn-outline-success float-right">{auth.uid == collection.authorId ? "Edit" : "Inspect"}</Link>
                     </Card.Footer>
                 </Card>
             )
