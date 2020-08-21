@@ -37,6 +37,11 @@ const collectionReducer = (state = initState, action) => {
                 ...state,
                 collectionForEdit: action.collection
             }
+        case "CLEAR_COLLECTION_FOR_EDIT":
+            return {
+                ...state,
+                collectionForEdit: null
+            }
         case "COLLECTIONS_FOUND":
             return {
                 ...state,

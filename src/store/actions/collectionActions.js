@@ -109,8 +109,8 @@ export const removeMovieFromCollection = (collection, movie) => {
         newCollections[collection[0]].movies = collection[1].movies;
         firestore.collection('users').doc(uid).update({
             collections: newCollections
-        })
-        firestore.collection('collections').where('authorId', '==', uid).get()
+        }).then(() => {
+            firestore.collection('collections').where('authorId', '==', uid).get()
             .then(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     const foundCollectionTitle = doc.data().title;
@@ -121,6 +121,7 @@ export const removeMovieFromCollection = (collection, movie) => {
                     }
                 });
             })
+        })
         dispatch({ type: "REMOVE_MOVIE_FROM_COLLECTION", collection })
     }
 }
@@ -157,8 +158,8 @@ export const moveMovieUp = (collection, movie) => {
                         }
                     });
                 })
-            dispatch({ type: "MOVE_MOVIE_UP", collection })
         }
+        dispatch({ type: "MOVE_MOVIE_UP", collection })
     }
 }
 
@@ -301,5 +302,11 @@ export const clearFoundCollections = () => {
 export const selectCollectionForEdit = (collection) => {
     return (dispatch, getState) => {
         dispatch({ type: "SELECT_COLLECTION_FOR_EDIT", collection })
+    }
+}
+
+export const clearCollectionForEdit = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: "CLEAR_COLLECTION_FOR_EDIT" })
     }
 }

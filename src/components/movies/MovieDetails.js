@@ -13,7 +13,7 @@ class MovieDetails extends Component {
         const { auth } = this.props;
         const { movie, position } = this.state;
         return (
-            <div>
+            <div key={position}>
                 <Card.Header style={{ fontSize: '20px' }}>{position ? <b>{position}.  </b> : null}{movie['Title']}</Card.Header>
                 <Card.Body>
                     <b>Year:</b> {movie['Year']}<br />

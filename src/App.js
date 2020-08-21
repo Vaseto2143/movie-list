@@ -30,7 +30,6 @@ function App() {
               <Route path='/createCollection' component={CreateCollection} />
               <Route path='/collectionDetails' component={CollectionDetails} />
               <Route path='/likedMovies' component={LikedMovies} />
-              
               <Route path='/signin' component={SignIn} />
               <Route path='/signup' component={SignUp} />
               <Route path='/passReset' component={ResetPassword} />
