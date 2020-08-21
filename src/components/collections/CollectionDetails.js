@@ -56,7 +56,6 @@ class CollectionDetails extends Component {
 
     render() {
         const { auth, collection, user } = this.props;
-        const moviesObject = collection[1].movies;
         const { pageNumber } = this.state;
         if (!collection) {
             if (!auth.uid) {
@@ -67,6 +66,7 @@ class CollectionDetails extends Component {
             }
         }
         else {
+            const moviesObject = collection[1].movies;
             const movies = Object.values(moviesObject);
             const moviesForPage = movies.length >= pageNumber * 2 ? [movies[(pageNumber * 2) - 2], movies[(pageNumber * 2) - 1]] : [movies[(pageNumber * 2) - 2]];
             let movieList = [];
@@ -105,7 +105,6 @@ class CollectionDetails extends Component {
                     )
                 }
             });
-            console.log(movieList)
             const pageCount = Math.ceil(movies.length / 2)
             let pageButtons = [];
             for (let i = 0; i < pageCount; i++) {
