@@ -171,7 +171,6 @@ export const moveMovieDown = (collection, movie) => {
 
         if (movie.position < collection[1].movies.length) {
             const position = movie.position;
-            console.log(position)
             const newMovies = collection[1].movies;
             const holder = collection[1].movies[position];
             newMovies[position] = newMovies[position - 1];

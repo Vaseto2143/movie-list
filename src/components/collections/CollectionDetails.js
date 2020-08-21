@@ -73,8 +73,8 @@ class CollectionDetails extends Component {
             Object.values(moviesForPage).forEach(movie => {
                 if (movie) {
                     movieList.push(
-                        <Card style={{ marginTop: '20px' }}>
-                            <MovieDetails movie={movie.movieInfo} position={movie.position} />
+                        <Card style={{ marginTop: '20px' }} key={movie.position}>
+                            <MovieDetails key={movie.position} movie={movie.movieInfo} position={movie.position} />
                             {auth.uid ?
                                 collection[1].authorId == auth.uid ?
                                     <Card.Footer>
