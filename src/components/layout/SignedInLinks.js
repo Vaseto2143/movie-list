@@ -14,9 +14,9 @@ const SignedInLinks = (props) => {
                     <li className="nav-item"><a className="nav-link" style={{ fontSize: "20px", textDecoration: "none" }}>{`${props.user.firstName} ${props.user.lastName}`}</a></li>
                     :
                     null}
-                <li className="nav-item"><a className="nav-link" onClick={props.clearClipboard}><NavLink to='/collections' style={{ fontSize: "20px", textDecoration: "none" }}>My Collections</NavLink></a></li>
-                <li className="nav-item"><a className="nav-link" onClick={props.clearClipboard}><NavLink to='/likedMovies' style={{ fontSize: "20px", textDecoration: "none" }}>Liked Movies</NavLink></a></li>
-                <li className="nav-item"><a className="nav-link" onClick={props.signOut}><NavLink to='/signin' style={{ fontSize: "20px", textDecoration: "none" }}>Sign Out</NavLink></a></li>
+                <li className="nav-item"><a className="nav-link"><NavLink onClick={props.clearClipboard} to='/collections' style={{ fontSize: "20px", textDecoration: "none" }}>My Collections</NavLink></a></li>
+                <li className="nav-item"><a className="nav-link"><NavLink onClick={props.clearClipboard} to='/likedMovies' style={{ fontSize: "20px", textDecoration: "none" }}>Liked Movies</NavLink></a></li>
+                <li className="nav-item"><a className="nav-link"><NavLink onClick={props.signOut} to='/signin' style={{ fontSize: "20px", textDecoration: "none" }}>Sign Out</NavLink></a></li>
             </ul>
         </div>
     )

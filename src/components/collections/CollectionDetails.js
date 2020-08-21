@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Container } from 'react-bootstrap';
+import { Card, Button, Container, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { removeMovieFromCollection, toggleCollectionPrivacy, moveMovieDown, moveMovieUp } from '../../store/actions/collectionActions';
@@ -8,7 +8,8 @@ import { addMovieToClipboard, unlikeMovie, likeMovie } from '../../store/actions
 
 class CollectionDetails extends Component {
     state = {
-        collection: this.props.collection
+        collection: this.props.collection,
+        pageNumber: 1
     }
 
     handleRemove = (collection, movie) => (e) => {
@@ -47,8 +48,16 @@ class CollectionDetails extends Component {
         this.props.unlikeMovie(movie);
     }
 
+    handlePageChange = (redirectTo) => (e) => {
+        this.setState({
+            pageNumber: redirectTo
+        })
+    }
+
     render() {
         const { auth, collection, user } = this.props;
+        const moviesObject = collection[1].movies;
+        const { pageNumber } = this.state;
         if (!collection) {
             if (!auth.uid) {
                 return <Redirect to='/' />
@@ -58,9 +67,11 @@ class CollectionDetails extends Component {
             }
         }
         else {
-            const movieList = Object.values(collection[1].movies).map(movie => {
+            const movies = Object.values(moviesObject);
+            const moviesForPage = movies.length >= pageNumber * 2 ? [movies[(pageNumber * 2) - 2], movies[(pageNumber * 2) - 1]] : [movies[(pageNumber * 2) - 2]]
+            const movieList = Object.values(moviesForPage).map(movie => {
                 return (
-                    <Card style={{ marginTop: '20px' }} key={movie.movieTitle}>
+                    <Card style={{ marginTop: '20px' }} key={movie.position}>
                         <MovieDetails key={movie.position} movie={movie.movieInfo} position={movie.position} />
                         {auth.uid ?
                             collection[1].authorId == auth.uid ?
@@ -77,7 +88,7 @@ class CollectionDetails extends Component {
                                 </Card.Footer>
                                 :
                                 <Card.Footer>
-                                    <Link to="/collections" className="btn btn-outline-success" style={{ marginRight: "10px" }} onClick={() => {this.props.addMovieToClipboard(movie.movieInfo)}}>Add to collection</Link>
+                                    <Link to="/collections" className="btn btn-outline-success" style={{ marginRight: "10px" }} onClick={() => { this.props.addMovieToClipboard(movie.movieInfo) }}>Add to collection</Link>
 
                                     {!user.likedMovies.hasOwnProperty([movie.movieTitle]) ?
                                         <Button className="float-right" variant="outline-success" onClick={this.handleLike(movie.movieInfo)}>Like</Button>
@@ -88,11 +99,17 @@ class CollectionDetails extends Component {
                             :
                             null
                         }
-
-
                     </Card>
                 )
             });
+
+            const pageCount = Math.ceil(movies.length / 2)
+            let pageButtons = [];
+            for (let i = 0; i < pageCount; i++) {
+                pageButtons.push(
+                    <Button style={{ marginRight: "5px", marginLeft: "5px" }} onClick={this.handlePageChange(i + 1)} variant={pageNumber == i + 1 ? "primary" : "outline-primary"}>{i + 1}</Button>
+                );
+            }
             return (
                 <Container>
                     <Card key={collection}>
@@ -116,12 +133,39 @@ class CollectionDetails extends Component {
                                     :
                                     null
                                 }
+                                <ButtonGroup className="float-right" style={{ marginRight: "10px" }}>
+                                    {pageButtons.length > 3 ?
+                                        pageNumber == 1 || pageNumber == pageButtons.length ?
+                                            pageNumber == 1 ?
+                                                <span>
+                                                    {[pageButtons[0], pageButtons[1]]}...{pageButtons[pageButtons.length - 1]}
+                                                </span>
+                                                :
+                                                <span>
+                                                    {pageButtons[0]}...{[pageButtons[pageButtons.length - 2], pageButtons[pageButtons.length - 1]]}
+                                                </span>
+                                            :
+                                            pageNumber == 2 || pageNumber == pageButtons.length - 1 ?
+                                                pageNumber == 2 ?
+                                                    <span>
+                                                        {[[pageButtons[0], pageButtons[1]], pageButtons[2]]}...{pageButtons[pageButtons.length - 1]}
+                                                    </span>
+                                                    :
+                                                    <span>
+                                                        {pageButtons[0]}...{[pageButtons[pageButtons.length - 3], pageButtons[pageButtons.length - 2], pageButtons[pageButtons.length - 1]]}
+                                                    </span>
+                                                :
+                                                <span>
+                                                    {pageButtons[0]}...{[pageButtons[pageNumber - 2], pageButtons[pageNumber - 1], pageButtons[pageNumber]]}...{pageButtons[pageButtons.length - 1]}
+                                                </span>
+                                        :
+                                        { pageButtons }
+                                    }
+                                </ButtonGroup>
                             </Card.Footer>
                             :
                             null
                         }
-
-
                     </Card>
                 </Container>
             )
