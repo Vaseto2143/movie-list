@@ -68,46 +68,49 @@ class CollectionDetails extends Component {
         }
         else {
             const movies = Object.values(moviesObject);
-            const moviesForPage = movies.length >= pageNumber * 2 ? [movies[(pageNumber * 2) - 2], movies[(pageNumber * 2) - 1]] : [movies[(pageNumber * 2) - 2]]
-            const movieList = Object.values(moviesForPage).map(movie => {
-                return (
-                    <Card style={{ marginTop: '20px' }} key={movie.position}>
-                        <MovieDetails key={movie.position} movie={movie.movieInfo} position={movie.position} />
-                        {auth.uid ?
-                            collection[1].authorId == auth.uid ?
-                                <Card.Footer>
-                                    {movie.position > 1 ?
-                                        <Button className="float-left" variant="outline-success" onClick={this.handleMoveUp(collection, movie)}>Move up</Button>
-                                        :
-                                        <Button className="float-left" variant="outline-secondary" onClick={this.handleMoveUp(collection, movie)}>Move up</Button>}
-                                    {movie.position < collection[1].movies.length ?
-                                        <Button className="float-left" style={{ marginLeft: "10px" }} variant="outline-danger" onClick={this.handleMoveDown(collection, movie)}>Move down</Button>
-                                        :
-                                        <Button className="float-left" style={{ marginLeft: "10px" }} variant="outline-secondary" onClick={this.handleMoveDown(collection, movie)}>Move down</Button>}
-                                    <Button key={movie.movieTitle} className="float-right" variant="outline-danger" onClick={this.handleRemove(collection, movie)}>Remove</Button>
-                                </Card.Footer>
+            const moviesForPage = movies.length >= pageNumber * 2 ? [movies[(pageNumber * 2) - 2], movies[(pageNumber * 2) - 1]] : [movies[(pageNumber * 2) - 2]];
+            let movieList = [];
+            Object.values(moviesForPage).forEach(movie => {
+                if (movie) {
+                    movieList.push(
+                        <Card style={{ marginTop: '20px' }}>
+                            <MovieDetails movie={movie.movieInfo} position={movie.position} />
+                            {auth.uid ?
+                                collection[1].authorId == auth.uid ?
+                                    <Card.Footer>
+                                        {movie.position > 1 ?
+                                            <Button className="float-left" variant="outline-success" onClick={this.handleMoveUp(collection, movie)}>Move up</Button>
+                                            :
+                                            <Button className="float-left" variant="outline-secondary" onClick={this.handleMoveUp(collection, movie)}>Move up</Button>}
+                                        {movie.position < collection[1].movies.length ?
+                                            <Button className="float-left" style={{ marginLeft: "10px" }} variant="outline-danger" onClick={this.handleMoveDown(collection, movie)}>Move down</Button>
+                                            :
+                                            <Button className="float-left" style={{ marginLeft: "10px" }} variant="outline-secondary" onClick={this.handleMoveDown(collection, movie)}>Move down</Button>}
+                                        <Button key={movie.movieTitle} className="float-right" variant="outline-danger" onClick={this.handleRemove(collection, movie)}>Remove</Button>
+                                    </Card.Footer>
+                                    :
+                                    <Card.Footer>
+                                        <Link to="/collections" className="btn btn-outline-success" style={{ marginRight: "10px" }} onClick={() => { this.props.addMovieToClipboard(movie.movieInfo) }}>Add to collection</Link>
+
+                                        {!user.likedMovies.hasOwnProperty([movie.movieTitle]) ?
+                                            <Button className="float-right" variant="outline-success" onClick={this.handleLike(movie.movieInfo)}>Like</Button>
+                                            :
+                                            <Button className="float-right" variant="outline-danger" onClick={this.handleUnlike(movie.movieInfo)}>Unlike</Button>
+                                        }
+                                    </Card.Footer>
                                 :
-                                <Card.Footer>
-                                    <Link to="/collections" className="btn btn-outline-success" style={{ marginRight: "10px" }} onClick={() => { this.props.addMovieToClipboard(movie.movieInfo) }}>Add to collection</Link>
-
-                                    {!user.likedMovies.hasOwnProperty([movie.movieTitle]) ?
-                                        <Button className="float-right" variant="outline-success" onClick={this.handleLike(movie.movieInfo)}>Like</Button>
-                                        :
-                                        <Button className="float-right" variant="outline-danger" onClick={this.handleUnlike(movie.movieInfo)}>Unlike</Button>
-                                    }
-                                </Card.Footer>
-                            :
-                            null
-                        }
-                    </Card>
-                )
+                                null
+                            }
+                        </Card>
+                    )
+                }
             });
-
+            console.log(movieList)
             const pageCount = Math.ceil(movies.length / 2)
             let pageButtons = [];
             for (let i = 0; i < pageCount; i++) {
                 pageButtons.push(
-                    <Button style={{ marginRight: "5px", marginLeft: "5px" }} onClick={this.handlePageChange(i + 1)} variant={pageNumber == i + 1 ? "primary" : "outline-primary"}>{i + 1}</Button>
+                    <Button key={i} style={{ marginRight: "5px", marginLeft: "5px" }} onClick={this.handlePageChange(i + 1)} variant={pageNumber == i + 1 ? "primary" : "outline-primary"}>{i + 1}</Button>
                 );
             }
             return (
@@ -159,7 +162,9 @@ class CollectionDetails extends Component {
                                                     {pageButtons[0]}...{[pageButtons[pageNumber - 2], pageButtons[pageNumber - 1], pageButtons[pageNumber]]}...{pageButtons[pageButtons.length - 1]}
                                                 </span>
                                         :
-                                        { pageButtons }
+                                        <span>
+                                            {pageButtons}
+                                        </span>
                                     }
                                 </ButtonGroup>
                             </Card.Footer>
