@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { removeMovieFromCollection, toggleCollectionPrivacy, moveMovieDown, moveMovieUp } from '../../store/actions/collectionActions';
 import MovieDetails from '../movies/MovieDetails';
-import { addMovieToClipboard } from '../../store/actions/movieActions';
+import { addMovieToClipboard, unlikeMovie, likeMovie } from '../../store/actions/movieActions';
 
 class CollectionDetails extends Component {
     state = {
@@ -39,6 +39,14 @@ class CollectionDetails extends Component {
         })
     }
 
+    handleLike = (movie) => (e) => {
+        this.props.likeMovie(movie);
+    }
+
+    handleUnlike = (movie) => (e) => {
+        this.props.unlikeMovie(movie);
+    }
+
     render() {
         const { auth, collection, user } = this.props;
         if (!collection) {
@@ -69,12 +77,12 @@ class CollectionDetails extends Component {
                                 </Card.Footer>
                                 :
                                 <Card.Footer>
-                                    <Link /* to="/collections" */ className="btn btn-outline-success" style={{ marginRight: "10px" }} /* onClick={this.props.addMovieToClipboard(movie)} */>Add to collection</Link>
+                                    <Link to="/collections" className="btn btn-outline-success" style={{ marginRight: "10px" }} onClick={() => {this.props.addMovieToClipboard(movie.movieInfo)}}>Add to collection</Link>
 
                                     {!user.likedMovies.hasOwnProperty([movie.movieTitle]) ?
-                                        <Button className="float-right" variant="outline-success" onClick={this.handleLike}>Like</Button>
+                                        <Button className="float-right" variant="outline-success" onClick={this.handleLike(movie.movieInfo)}>Like</Button>
                                         :
-                                        <Button className="float-right" variant="outline-danger" onClick={this.handleUnlike}>Unlike</Button>
+                                        <Button className="float-right" variant="outline-danger" onClick={this.handleUnlike(movie.movieInfo)}>Unlike</Button>
                                     }
                                 </Card.Footer>
                             :
@@ -135,7 +143,9 @@ const mapDispatchToProps = (dispatch) => {
         toggleCollectionPrivacy: (collection) => dispatch(toggleCollectionPrivacy(collection)),
         moveMovieUp: (collection, movie) => dispatch(moveMovieUp(collection, movie)),
         moveMovieDown: (collection, movie) => dispatch(moveMovieDown(collection, movie)),
-        addMovieToClipboard: (movie) => dispatch(addMovieToClipboard(movie))
+        addMovieToClipboard: (movie) => dispatch(addMovieToClipboard(movie)),
+        likeMovie: (movie) => dispatch(likeMovie(movie)),
+        unlikeMovie: (movie) => dispatch(unlikeMovie(movie))
     }
 }
 

@@ -1,4 +1,7 @@
-const initState = {};
+const initState = {
+    movieForInteraction: null,
+    foundOMDbMovie: null
+};
 
 const movieReducer = (state = initState, action) => {
     switch (action.type) {

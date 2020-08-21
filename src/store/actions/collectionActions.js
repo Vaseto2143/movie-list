@@ -80,8 +80,8 @@ export const assignMovieToCollection = (collection, movie) => {
                         }
                     });
                 })
-            dispatch({ type: "ASSIGN_MOVIE_TO_COLLECTION", collection })
         }
+        dispatch({ type: "ASSIGN_MOVIE_TO_COLLECTION", collection })
     }
 }
 
