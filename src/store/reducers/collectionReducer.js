@@ -44,6 +44,12 @@ const collectionReducer = (state = initState, action) => {
                 collectionsFound: action.collectionsFound,
                 searchError: null
             }
+        case "RANDOM_COLLECTIONS_FOUND":
+            return {
+                ...state,
+                collectionsFound: action.collectionsFound,
+                searchError: null
+            }
         case "COLLECTION_SEARCH_ERROR":
             return {
                 ...state,

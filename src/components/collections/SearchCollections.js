@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Col, Form, FormControl, Button, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { searchCollections, clearFoundCollections, selectCollectionForEdit } from '../../store/actions/collectionActions';
+import { searchCollections, clearFoundCollections, selectCollectionForEdit, searchRandomCollections } from '../../store/actions/collectionActions';
 
 class SearchCollections extends Component {
     state = {
@@ -28,6 +28,16 @@ class SearchCollections extends Component {
         })
     }
 
+    handleShowRandom = (e) => {
+        e.preventDefault();
+        this.props.clearFoundCollections();
+        this.props.searchRandomCollections();
+        this.setState({
+            collectionsFound: this.props.collectionsFound,
+            errorMessage: this.searchError ? this.searchError : "No collections found."
+        })
+    }
+
     handleDetails = (collection, authorId, comments, ratings) => (e) => {
         this.props.selectCollectionForEdit([collection.title, { movies: collection.movies, privacy: collection.privacy, authorId, comments, ratings }])
     }
@@ -36,7 +46,7 @@ class SearchCollections extends Component {
         const { collectionsFound, searchError, auth } = this.props;
         const collectionList = collectionsFound.map(collection => {
             return (
-                <Card style={{ marginTop: '20px' }} key={collection.title}>
+                <Card style={{ marginTop: '20px' }} key={`${collection.title}${collection.authorId}`}>
                     <Card.Header style={{ fontSize: '20px' }}>{collection.title} <span className="float-right">By: {collection.authorFirstName} {collection.authorLastName}</span></Card.Header>
                     <Card.Body>
                         {collection.movies.length} movies in collection
@@ -62,7 +72,10 @@ class SearchCollections extends Component {
                     <Card.Body>
                         <Form inline className="justify-content-between" onSubmit={this.handleSearch}>
                             <FormControl type="text" placeholder="Search" className="mr-sm-2" onChange={this.handleChange} />
-                            <Button type="button" variant="outline-primary" onClick={this.handleSearch}>Search</Button>
+                            <span>
+                                <Button style={{ marginRight: "10px"}} type="button" variant="outline-primary" onClick={this.handleSearch}>Search</Button>
+                                <Button type="button" variant="outline-primary" onClick={this.handleShowRandom}>Show random</Button>
+                            </span>
                         </Form>
                         {collectionsFound.length > 0 ?
                             collectionList
@@ -92,6 +105,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         clearFoundCollections: () => dispatch(clearFoundCollections()),
         searchCollections: (collectionTitle) => dispatch(searchCollections(collectionTitle)),
+        searchRandomCollections: () => dispatch(searchRandomCollections()),
         selectCollectionForEdit: (collection) => dispatch(selectCollectionForEdit(collection))
     }
 }

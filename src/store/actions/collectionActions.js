@@ -5,7 +5,7 @@ export const createCollection = (collectionTitle, collectionPrivacy) => {
         const uid = getState().firebase.auth.uid;
         const newCollections = user.collections;
         if (!user.collections.hasOwnProperty(collectionTitle)) {
-            newCollections[collectionTitle] = { privacy: collectionPrivacy, movies: [], comments: [], ratings: []};
+            newCollections[collectionTitle] = { privacy: collectionPrivacy, movies: [], comments: [], ratings: [] };
             firestore.collection('users').doc(uid).update({
                 collections: newCollections
             })
@@ -249,6 +249,43 @@ export const searchCollections = (collectionTitle) => {
             })
             .then(() => {
                 dispatch({ type: "COLLECTIONS_FOUND", collectionsFound })
+            })
+            .catch(err => {
+                dispatch({ type: "COLLECTIONS_SEARCH_ERROR", err });
+            })
+    }
+}
+
+export const searchRandomCollections = () => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore();
+
+        let collectionsFound = [];
+        firestore.collection('collections').get()
+            .then(querySnapshot => {
+                let collections = [];
+                querySnapshot.forEach(doc => {
+                    collections.push(doc.data());
+                });
+
+                let publicCollections = [];
+                collections.forEach(collection => {
+                    if(collection.privacy == "Public"){
+                        publicCollections.push(collection);
+                    }
+                })
+
+                const collectionsCount = publicCollections.length < 3 ? publicCollections.length : 3
+                while(collectionsFound.length < collectionsCount){
+                    const randomIndex = Math.floor(Math.random() * publicCollections.length );
+                    const randomCollection = publicCollections[randomIndex];
+                    if(!collectionsFound.includes(randomCollection)){
+                        collectionsFound.push(randomCollection)
+                    }
+                }
+            })
+            .then(() => {
+                dispatch({ type: "RANDOM_COLLECTIONS_FOUND", collectionsFound })
             })
             .catch(err => {
                 dispatch({ type: "COLLECTIONS_SEARCH_ERROR", err });
