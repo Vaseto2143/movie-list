@@ -130,20 +130,22 @@ class CollectionDetails extends Component {
                             }
                         </Card.Body>
                         <Card.Footer>
-                            {auth.uid ?
-                                <div>
-                                    <Link to="/collectionRatings" onClick={() => { }} style={{ marginRight: "10px" }} className="btn btn-outline-secondary">Ratings</Link>
-                                    <Link to="/collectionComments" onClick={() => { }} className="btn btn-outline-secondary">Comments</Link>
-                                    {collection[1].authorId == auth.uid ?
-                                        collection[1].privacy == "Private" ?
-                                            <Button onClick={this.handlePrivacyChange(collection)} variant="outline-danger" className="float-right">{collection[1].privacy}</Button>
+                                {auth.uid ?
+                                    <span>
+                                        <Link to="/collectionRatings" onClick={() => { }} style={{ marginRight: "10px" }} className="btn btn-outline-secondary">Ratings</Link>
+                                        <Link to="/collectionComments" onClick={() => { }} className="btn btn-outline-secondary">Comments</Link>
+                                        {collection[1].authorId == auth.uid ?
+                                            collection[1].privacy == "Private" ?
+                                                <Button onClick={this.handlePrivacyChange(collection)} variant="outline-danger" className="float-right">{collection[1].privacy}</Button>
+                                                :
+                                                <Button onClick={this.handlePrivacyChange(collection)} variant="outline-success" className="float-right">{collection[1].privacy}</Button>
                                             :
-                                            <Button onClick={this.handlePrivacyChange(collection)} variant="outline-success" className="float-right">{collection[1].privacy}</Button>
-                                        :
-                                        null
-                                    }
-                                </div>
-                                :
+                                            null
+                                        }
+                                    </span>
+                                    :
+                                    null
+                                }
                                 <ButtonGroup className="float-right" style={{ marginRight: "10px" }}>
                                     {pageButtons.length > 3 ?
                                         pageNumber == 1 || pageNumber == pageButtons.length ?
@@ -175,7 +177,6 @@ class CollectionDetails extends Component {
                                         </span>
                                     }
                                 </ButtonGroup>
-                            }
                         </Card.Footer>
                     </Card>
                 </Container>
